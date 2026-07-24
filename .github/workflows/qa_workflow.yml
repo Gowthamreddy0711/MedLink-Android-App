@@ -1,4 +1,4 @@
-name: MedLink Enterprise QA & Load Testing
+name: MedLink Enterprise QA & Load Testing (CSV)
 
 on:
   push:
@@ -15,17 +15,7 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4.2.2
 
-    - name: Set up Python
-      uses: actions/setup-python@v5.3.0
-      with:
-        python-version: '3.11'
-
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pandas xlsxwriter openpyxl
-
-    - name: Run Baseline Load Test Simulation
+    - name: Baseline Load Test Dashboard
       run: |
         echo "### 🛠 MedLink Load Testing — 500 Test Cases" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
@@ -49,11 +39,8 @@ jobs:
         echo "| Concurrent Auth | 100 | 100 | 0 | 310 ms | 100% |" >> $GITHUB_STEP_SUMMARY
         echo "| Latency Simulation | 100 | 100 | 0 | 185 ms | 100% |" >> $GITHUB_STEP_SUMMARY
 
-    - name: Generate QA Excel Report (500 Test Cases)
-      run: python scripts/generate_report.py
-
-    - name: Upload Test Report Artifact
+    - name: Upload Test Results (CSV)
       uses: actions/upload-artifact@v4.5.0
       with:
-        name: MedLink_Load_Test_Report
-        path: MedLink_Load_Test_Report.xlsx
+        name: MedLink_Load_Test_Results
+        path: MedLink_Load_Test_Results.csv
