@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.iml
 .gradle
 .kotlin
@@ -16,3 +17,13 @@
 local.properties
 .env
 debug.keystore
+=======
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+>>>>>>> 7af822f2f7758cb3aa4d55983de39d878079315b
