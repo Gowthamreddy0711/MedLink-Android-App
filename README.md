@@ -1,36 +1,208 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# 🏥 MedLink Android App
 
-# Run and deploy your AI Studio app
+MedLink is a modern Android healthcare application designed to streamline communication between patients, doctors, and administrators. The app enables secure appointment booking, digital prescriptions, queue management, notifications, and AI-assisted healthcare features, providing a seamless healthcare experience.
 
-This contains everything you need to run your app locally.
+---
 
-<<<<<<< HEAD
-View your app in AI Studio: https://ai.studio/apps/81cc7b73-d2f3-4731-af96-d7d9450d0506
+## 📱 Features
 
-## Run Locally
+### 👨‍⚕️ Doctor Module
+- Secure Doctor Registration & Login
+- Dashboard Overview
+- Appointment Management
+- Queue Management
+- Digital Prescription Pad
+- Patient Medical History
+- Leave Management
+- Covering Doctor Assignment
+- Notification Center
+- AI Assistant
+- Profile Management
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+### 🧑 Patient Module
+- Secure Registration & Login
+- Book Appointments
+- Live Queue Tracking
+- Digital Prescriptions
+- Appointment History
+- Medical Records
+- Doctor Search
+- Reviews & Ratings
+- Notifications
+- AI Health Assistant
+- Profile Management
 
+### 👨‍💼 Admin Module
+- Doctor Verification
+- User Management
+- Dashboard Analytics
+- Reports & Monitoring
+- System Notifications
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
-=======
-View your app in AI Studio: https://ai.studio/apps/37be872c-fbcb-4fa6-9d91-730b63e46941
+---
 
-## Run Locally
+# 🚀 Technologies Used
 
-**Prerequisites:**  Node.js
+- Kotlin
+- Jetpack Compose
+- MVVM Architecture
+- Android Jetpack Components
+- Room Database
+- Firebase Authentication
+- Cloud Firestore
+- Firebase Storage
+- Material Design 3
+- Coroutines
+- StateFlow / Flow
 
+---
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
->>>>>>> 7af822f2f7758cb3aa4d55983de39d878079315b
+# 🔒 Security Features
+
+- Firebase Authentication
+- Role-Based Access Control
+- Secure Firestore Rules
+- Encrypted Data Storage
+- Secure Session Management
+- Password Validation
+- Input Validation
+- HTTPS Communication
+- Secure File Storage
+
+---
+
+# 🤖 AI Features
+
+- AI Healthcare Assistant
+- Smart Appointment Suggestions
+- Intelligent Queue Management
+- Automated Notifications
+
+---
+
+# 📂 Project Structure
+
+```text
+MedLink/
+│
+├── app/
+├── gradle/
+├── .idea/
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradle.properties
+├── firestore.rules
+├── metadata.json
+├── .env.example
+└── README.md
+```
+
+---
+
+# ⚙️ Requirements
+
+- Android Studio Narwhal / Meerkat or later
+- JDK 17+
+- Android SDK 24+
+- Gradle 8+
+- Firebase Project
+
+---
+
+# 🛠 Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/Gowthamreddy0711/MedLink.git
+```
+
+Open the project in Android Studio.
+
+Sync Gradle dependencies.
+
+Configure Firebase.
+
+Run the application on an emulator or physical device.
+
+---
+
+# 🧪 Testing
+
+The application supports:
+
+- Unit Testing (JUnit 5)
+- Mockito Testing
+- UI Testing (Espresso)
+- Appium Automation
+- Functional Testing
+- Integration Testing
+- Validation Testing
+- Firebase Testing
+- Security Testing
+- Vulnerability Testing
+- Performance Testing
+- Load Testing
+- Stress Testing
+- Compatibility Testing
+
+---
+
+# 📸 Screenshots
+
+Add screenshots of the application here.
+
+```text
+screenshots/
+├── splash.png
+├── login.png
+├── patient_dashboard.png
+├── doctor_dashboard.png
+├── appointments.png
+└── prescription.png
+```
+
+---
+
+# 🎯 Future Enhancements
+
+- Video Consultation
+- Wearable Device Integration
+- Multi-language Support
+- Offline Synchronization
+- Smart Health Analytics
+- Electronic Prescription Verification
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork the repository.
+2. Create a new feature branch.
+3. Commit your changes.
+4. Push your branch.
+5. Open a Pull Request.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+# 👨‍💻 Developer
+
+**Gowtham Reddy**
+
+Computer Science & Engineering Student
+
+GitHub: https://github.com/Gowthamreddy0711
+
+---
+
+## ⭐ Support
+
+If you found this project useful, please consider giving it a ⭐ on GitHub.
