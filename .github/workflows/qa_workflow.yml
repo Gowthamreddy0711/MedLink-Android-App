@@ -1,0 +1,85 @@
+name: MedLink Enterprise QA Workflow
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install Python Dependencies
+      run: |
+        pip install pandas openpyxl
+
+    - name: Install k6
+      run: |
+        gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+        echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+        sudo apt-get update
+        sudo apt-get install k6
+
+    - name: Grant Execute Permission to Gradlew
+      run: chmod +x gradlew
+
+    - name: Build and Run Unit Tests
+      run: ./gradlew testDebugUnitTest
+      continue-on-error: true # Ensure reporting script runs even if tests fail
+
+    - name: Run Load Testing (k6)
+      run: |
+        k6 run load-testing/load_test.js --summary-export=load-testing/results.json
+      continue-on-error: true
+
+    - name: Generate Excel Report
+      run: python scripts/generate_report.py
+      env:
+        GITHUB_RUN_ID: ${{ github.run_id }}
+
+    - name: Upload Excel Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: MedLink_Test_Report
+        path: reports/MedLink_Test_Report.xlsx
+
+    - name: Upload JUnit Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: JUnit_Reports
+        path: app/build/test-results/testDebugUnitTest/
+
+    - name: Upload Load Test Data
+      uses: actions/upload-artifact@v4
+      with:
+        name: Load_Test_Results
+        path: load-testing/results.json
+
+    - name: Final Status Check
+      run: |
+        # Fail the job if tests actually failed
+        if [ -d "app/build/test-results/testDebugUnitTest" ]; then
+          if grep -q "failure" app/build/test-results/testDebugUnitTest/*.xml; then
+            echo "Tests failed. Failing workflow."
+            exit 1
+          fi
+        fi
