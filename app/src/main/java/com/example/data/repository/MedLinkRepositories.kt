@@ -70,7 +70,7 @@ class AuthRepository(
             email = email,
             name = name,
             role = role,
-            verified = (role != "DOCTOR"),
+            verified = true, // Auto-verified for instant access
             specialty = specialty,
             licenseNumber = licenseNumber,
             registrationNumber = registrationNumber,
@@ -104,10 +104,6 @@ class AuthRepository(
             val userId = firebaseRepository.getCurrentUserId() ?: ""
             val user = firebaseRepository.getUser(userId)
             if (user != null) {
-                if (user.role == "DOCTOR" && !user.verified) {
-                    firebaseRepository.logout()
-                    return@withContext Result.failure(Exception("Verification pending: Your background medical license is currently being audited."))
-                }
                 sessionManager.saveSession(user.id, user.email, user.role)
             }
         }

@@ -105,9 +105,6 @@ fun AuthScreen(
     onLoginSuccess: () -> Unit
 ) {
     var screenState by remember { mutableStateOf(AuthScreenState.SPLASH) }
-    
-    // We can pre-fill admin username/password if role selection goes through admin path
-    var adminPreFillRequested by remember { mutableStateOf(false) }
 
     AnimatedContent(
         targetState = screenState,
@@ -125,17 +122,10 @@ fun AuthScreen(
             AuthScreenState.ROLE_SELECTION -> {
                 RoleSelectionScreen(
                     onSelectPatient = {
-                        adminPreFillRequested = false
                         viewModel.clearAuthErrors()
                         screenState = AuthScreenState.PATIENT_AUTH
                     },
                     onSelectDoctor = {
-                        adminPreFillRequested = false
-                        viewModel.clearAuthErrors()
-                        screenState = AuthScreenState.DOCTOR_AUTH
-                    },
-                    onSelectAdminPortal = {
-                        adminPreFillRequested = true
                         viewModel.clearAuthErrors()
                         screenState = AuthScreenState.DOCTOR_AUTH
                     }
@@ -153,7 +143,6 @@ fun AuthScreen(
             AuthScreenState.DOCTOR_AUTH -> {
                 DoctorAuthScreen(
                     viewModel = viewModel,
-                    preFillAdmin = adminPreFillRequested,
                     onBackToRoles = {
                         screenState = AuthScreenState.ROLE_SELECTION
                     },
@@ -278,8 +267,7 @@ fun SplashScreen(onFinished: () -> Unit) {
 @Composable
 fun RoleSelectionScreen(
     onSelectPatient: () -> Unit,
-    onSelectDoctor: () -> Unit,
-    onSelectAdminPortal: () -> Unit
+    onSelectDoctor: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -460,36 +448,6 @@ fun RoleSelectionScreen(
             HorizontalDivider(color = Color(0xFFE2E8F0), modifier = Modifier.padding(horizontal = 16.dp))
 
             Spacer(modifier = Modifier.height(20.dp))
-
-            // Easy admin compliance entryway
-            Card(
-                onClick = onSelectAdminPortal,
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = com.example.ui.theme.PolishSkyLight.copy(alpha = 0.5f)),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AssignmentInd,
-                        contentDescription = "Inspector Icon",
-                        tint = com.example.ui.theme.PolishSky,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Compliance Administrative Portal Entry",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = com.example.ui.theme.PolishSky
-                    )
-                }
-            }
         }
     }
 }
@@ -849,7 +807,6 @@ fun PatientAuthScreen(
 @Composable
 fun DoctorAuthScreen(
     viewModel: MedLinkViewModel,
-    preFillAdmin: Boolean,
     onBackToRoles: () -> Unit,
     onLoginSuccess: () -> Unit
 ) {
@@ -858,8 +815,8 @@ fun DoctorAuthScreen(
     var lastSignedUpDoctorName by remember { mutableStateOf("") }
 
     // Forms
-    var email by remember { mutableStateOf(if (preFillAdmin) "admin@medlink.com" else "") }
-    var password by remember { mutableStateOf(if (preFillAdmin) "admin123" else "") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
@@ -1253,54 +1210,6 @@ fun DoctorAuthScreen(
                             lineHeight = 14.sp,
                             modifier = Modifier.padding(bottom = 20.dp, start = 4.dp, end = 4.dp)
                         )
-                    } else {
-                        // Quick Pre-fill administrative Inspector helper when in login mode
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 20.dp)
-                        ) {
-                            Text(
-                                text = "Admin Review Access:",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF64748B),
-                                modifier = Modifier.padding(bottom = 6.dp)
-                            )
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(com.example.ui.theme.PolishBg, RoundedCornerShape(12.dp))
-                                    .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(12.dp))
-                                    .clickable {
-                                        email = "admin@medlink.com"
-                                        password = "admin123"
-                                    }
-                                    .padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = null,
-                                    tint = com.example.ui.theme.PolishSky,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Column {
-                                    Text(
-                                        text = "Tap to autofill official Inspector credentials",
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = com.example.ui.theme.PolishSky
-                                    )
-                                    Text(
-                                        text = "admin@medlink.com / admin123",
-                                        fontSize = 10.sp,
-                                        color = Color(0xFF64748B)
-                                    )
-                                }
-                            }
-                        }
                     }
 
                     Button(
@@ -1408,7 +1317,7 @@ fun DoctorAuthScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Note: First-time doctor accounts enter a 'Pending' status. You can sign in using Administrator credentials (admin@medlink.com / admin123) to instantly approve your account from the Compliance Panel, or log in once approved.",
+                            text = "Note: Your doctor account has been instantly activated and verified. You can now access all clinical operations and patient queue features.",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = com.example.ui.theme.PolishSky
