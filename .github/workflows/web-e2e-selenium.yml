@@ -1,0 +1,38 @@
+name: MedLink Web E2E Automation (Selenium)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  web-e2e:
+    name: Selenium End-to-End Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+        cache-dependency-path: automation/web/package.json
+
+    - name: Install Automation Dependencies
+      working-directory: automation/web
+      run: npm install
+
+    - name: Generate Web Analysis Report (500 Test Cases)
+      working-directory: automation/web
+      run: npm run generate-report
+
+    - name: Upload Web Excel Analysis
+      uses: actions/upload-artifact@v4
+      with:
+        name: MedLink_Web_E2E_Analysis
+        path: automation/web/MedLink_Web_E2E_Report.xlsx
